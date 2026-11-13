@@ -1,0 +1,13 @@
+{
+  "name": "Signal Hill",
+  "short_name": "Signal Hill",
+  "description": "A product lab. Human behavior is chaos. We find the signal.",
+  "start_url": ".",
+  "display": "browser",
+  "background_color": "#efece6",
+  "theme_color": "#efece6",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
