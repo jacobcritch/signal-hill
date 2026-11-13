@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Signal Hill</title>
+  <meta name="description" content="A product lab. Human behavior is chaos. We find the signal.">
+  <meta name="theme-color" content="#070706">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>document.documentElement.classList.replace("no-js","js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#mail">Skip to contact</a>
+
+  <canvas id="field" class="field" aria-hidden="true"></canvas>
+  <canvas id="overlay" class="overlay" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="scan" aria-hidden="true"></div>
+
+  <div class="hud">
+    <header class="hud__top">
+      <h1 class="wordmark" data-wordmark>SIGNAL HILL</h1>
+      <p class="hud__lab" data-fade>A product lab.</p>
+    </header>
+
+    <div class="crosshair" data-crosshair aria-hidden="true">
+      <span class="crosshair__h"></span>
+      <span class="crosshair__v"></span>
+      <span class="crosshair__c"></span>
+    </div>
+
+    <div class="tel tel--tl" data-fade data-tel-state>STANDBY</div>
+    <div class="tel tel--tr" data-fade>
+      <span data-tel-clock>00:00:00</span>
+      <span class="tel__dim">PREVIEW</span>
+    </div>
+    <div class="tel tel--bl" data-fade>
+      <span>47.5700N  52.6818W</span>
+      <span class="tel__snr">SNR <span data-tel-snr>0.000</span> <abbr class="tel__ill" title="Decorative readout, not a measured metric">ILL</abbr></span>
+    </div>
+    <div class="tel tel--br" data-fade data-tel-mode>FIELD  ·  IDLE</div>
+
+    <footer class="hud__bottom">
+      <p class="tagline" data-fade>Human behavior is chaos. We find the signal.</p>
+      <a class="mail" id="mail" href="mailto:hello@signalhill.co" data-fade>hello@signalhill.co</a>
+    </footer>
+  </div>
+
+  <!-- PLACEHOLDER: hello@signalhill.co is a brand-name inbox, not yet a live mailbox. Replace before launch. -->
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
