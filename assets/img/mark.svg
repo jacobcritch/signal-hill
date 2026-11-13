@@ -1,6 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 36" fill="none" role="img" aria-label="Signal Hill, drawn as a chart line with Cabot Tower at the peak">
-  <!-- faint chart grid -->
-  <g stroke="#161513" stroke-width="0.4" opacity="0.22">
+  <style>
+    .grid, .axis { stroke: #ece8e0; }
+    .hill { stroke: #e8552e; }
+    @media (prefers-color-scheme: light) {
+      .grid, .axis { stroke: #161513; }
+      .hill { stroke: #d64520; }
+    }
+  </style>
+  <g class="grid" stroke-width="0.4" opacity="0.22">
     <line x1="8" y1="9" x2="61" y2="9"/>
     <line x1="8" y1="16" x2="61" y2="16"/>
     <line x1="8" y1="23" x2="61" y2="23"/>
@@ -8,21 +15,10 @@
     <line x1="34" y1="6" x2="34" y2="29"/>
     <line x1="47" y1="6" x2="47" y2="29"/>
   </g>
-  <!-- axes + ticks -->
-  <g stroke="#161513" stroke-width="0.7" stroke-linecap="square" opacity="0.45">
+  <g class="axis" stroke-width="0.7" stroke-linecap="square" opacity="0.45">
     <path d="M8 6 V29 H61"/>
     <path d="M8 9 H6.2 M8 16 H6.2 M8 23 H6.2"/>
     <path d="M21 29 V30.8 M34 29 V30.8 M47 29 V30.8 M60 29 V30.8"/>
   </g>
-  <!-- Signal Hill profile: rises from the left like a data series, modest seaward descent -->
-  <path d="M9 28 L14 26.6 L19 24.8 L23 23.2 L26 21.4 L29 16.6 L33 11.4 L37 7.8 L41 6.2 L46 8.4 L52 11 L58 13.2"
-        stroke="#d64520" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>
-  <!-- Cabot Tower as a data-point marker at the peak -->
-  <g fill="#d64520">
-    <rect x="38.7" y="2.15" width="4.6" height="4.15"/>
-    <rect x="38.7" y="1.15" width="1.2" height="1.15"/>
-    <rect x="40.4" y="1.15" width="1.2" height="1.15"/>
-    <rect x="42.1" y="1.15" width="1.2" height="1.15"/>
-    <rect x="40.8" y="0.1" width="0.5" height="1.15"/>
-  </g>
+  <path class="hill" d="M9 28 L14 26.6 L19 24.8 L23 23.2 L26 21.5 L29 17.2 L32.4 13 L35 10.55 L35.8 9.85 L35.8 4.45 L37.6 4.45 L37.6 5.2 L38.3 5.2 L38.3 4.45 L40.2 4.45 L40.2 5.2 L42.4 5.2 L42.4 1.45 L43.3 1.45 L43.3 2 L43.65 2 L43.65 1.45 L43.9 1.45 L43.9 0.25 L45.15 0.25 L45.15 0.75 L43.9 0.75 L43.9 1.45 L44.3 1.45 L44.3 2 L44.65 2 L44.65 1.45 L45.25 1.45 L45.25 8.25 L46.2 8.25 L46.2 9.85 L48.2 10.4 L52.4 11.6 L58 13.2" stroke-width="1.85" stroke-linejoin="miter" stroke-miterlimit="8" stroke-linecap="butt"/>
 </svg>

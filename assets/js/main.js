@@ -11,25 +11,48 @@
   var ctx = canvas.getContext("2d", { alpha: true });
 
   // Signal Hill as a plotted series in logo space (y down).
-  // The hill is a polyline; at the peak it steps up into a squared, crenellated tower, then back down.
+  // The hill traces a Cabot Tower silhouette at the peak: squat castellated
+  // main block, taller corner turret with a flared cap, flag, and a low entrance wing.
   var PATH = [
-    [9, 28], [14, 26.6], [19, 24.8], [23, 23.2], [26, 21.4],
-    [29, 16.6], [33, 11.4], [37, 7.8],
-    [38.7, 6.2],
-    // left wall up, merlon 1
-    [38.7, 0.95], [40.1, 0.95], [40.1, 2.2],
-    // merlon 2, slightly taller
-    [40.55, 2.2], [40.55, 0.7], [42.0, 0.7], [42.0, 2.2],
-    // merlon 3, right wall down
-    [42.45, 2.2], [42.45, 0.95], [43.9, 0.95], [43.9, 6.2],
+    [9, 28], [14, 26.6], [19, 24.8], [23, 23.2], [26, 21.5],
+    [29, 17.2], [32.4, 13.0], [35.0, 10.55],
+    [35.8, 9.85],
+    // plinth
+    [35.25, 9.85], [35.25, 8.95], [35.8, 8.95],
+    // left wall + corbel
+    [35.8, 5.85],
+    [35.45, 5.85], [35.45, 5.40], [35.8, 5.40],
+    // main-block merlons
+    [35.8, 4.45],
+    [36.95, 4.45], [36.95, 5.15], [37.45, 5.15],
+    [37.45, 4.45], [38.60, 4.45], [38.60, 5.15], [39.10, 5.15],
+    [39.10, 4.45], [40.25, 4.45], [40.25, 5.15], [40.75, 5.15],
+    [40.75, 4.45], [41.90, 4.45], [41.90, 5.15],
+    [42.40, 5.15],
+    // turret left wall + flared cap
+    [42.40, 2.55],
+    [42.05, 2.55], [42.05, 2.15], [42.40, 2.15],
+    [42.40, 1.45],
+    [43.20, 1.45], [43.20, 1.95], [43.50, 1.95], [43.50, 1.45],
+    [43.80, 1.45],
+    // flagpole + small flag
+    [43.80, 0.18], [45.20, 0.18], [45.20, 0.72], [43.80, 0.72], [43.80, 1.45],
+    [44.15, 1.45], [44.15, 1.95], [44.45, 1.95], [44.45, 1.45],
+    [45.25, 1.45],
+    [45.25, 2.15], [45.60, 2.15], [45.60, 2.55], [45.25, 2.55],
+    // lower entrance wing
+    [45.25, 8.25], [46.25, 8.25], [46.25, 9.85],
     // seaward descent
-    [46.2, 8.4], [52, 11], [58, 13.2]
+    [48.2, 10.4], [52.4, 11.6], [58, 13.2]
   ];
 
-  var PAPER = [239, 236, 230];
-  var PAPER2 = [247, 245, 240];
-  var INK = [22, 21, 19];
-  var RUST = [214, 69, 32];
+  var PAPER = [18, 17, 16];
+  var PAPER2 = [24, 23, 21];
+  var INK = [236, 232, 224];
+  var RUST = [232, 85, 46];
+  var GRID = "rgba(236, 232, 224, 0.07)";
+  var AXIS = "rgba(236, 232, 224, 0.32)";
+  var THEME_KEY = "signal-hill-theme";
 
   var T_CHAOS = 1600;
   var T_GATHER = 4800;
@@ -62,6 +85,69 @@
 
   function color(rgb, a) {
     return "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + a + ")";
+  }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  }
+
+  function applyPalette() {
+    if (currentTheme() === "light") {
+      PAPER = [239, 236, 230];
+      PAPER2 = [247, 245, 240];
+      INK = [22, 21, 19];
+      RUST = [214, 69, 32];
+      GRID = "rgba(22, 21, 19, 0.08)";
+      AXIS = "rgba(22, 21, 19, 0.32)";
+    } else {
+      PAPER = [18, 17, 16];
+      PAPER2 = [24, 23, 21];
+      INK = [236, 232, 224];
+      RUST = [232, 85, 46];
+      GRID = "rgba(236, 232, 224, 0.07)";
+      AXIS = "rgba(236, 232, 224, 0.32)";
+    }
+  }
+
+  function syncToggle(theme) {
+    var btn = document.querySelector("[data-theme-toggle]");
+    if (!btn) return;
+    var next = theme === "light" ? "dark" : "light";
+    btn.setAttribute("aria-label", "Switch to " + next + " theme");
+    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+  }
+
+  function setTheme(theme, persist) {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (persist !== false) {
+      try { localStorage.setItem(THEME_KEY, theme); } catch (err) {}
+    }
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", theme === "light" ? "#efece6" : "#121110");
+    applyPalette();
+    syncToggle(theme);
+    if (w) draw(frozen != null ? frozen : 1);
+  }
+
+  function initTheme() {
+    applyPalette();
+    syncToggle(currentTheme());
+    var btn = document.querySelector("[data-theme-toggle]");
+    if (btn) {
+      btn.addEventListener("click", function () {
+        setTheme(currentTheme() === "dark" ? "light" : "dark", true);
+      });
+    }
+    var mq = window.matchMedia("(prefers-color-scheme: light)");
+    var onChange = function (e) {
+      var saved = null;
+      try { saved = localStorage.getItem(THEME_KEY); } catch (err) {}
+      if (saved !== "light" && saved !== "dark") {
+        setTheme(e.matches ? "light" : "dark", false);
+      }
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onChange);
+    else if (mq.addListener) mq.addListener(onChange);
   }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -143,7 +229,7 @@
 
     // Graph-paper grid, origin at the axis corner
     var step = 28;
-    ctx.strokeStyle = "rgba(22, 21, 19, 0.08)";
+    ctx.strokeStyle = GRID;
     ctx.lineWidth = 1;
     ctx.beginPath();
     for (var gx = L.left; gx <= L.right + 0.5; gx += step) {
@@ -161,7 +247,7 @@
     ctx.stroke();
 
     // Faint axes + ticks
-    ctx.strokeStyle = "rgba(22, 21, 19, 0.32)";
+    ctx.strokeStyle = AXIS;
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(L.left + 0.5, L.top);
@@ -228,7 +314,7 @@
     ctx.save();
     ctx.beginPath();
     ctx.lineJoin = "miter";
-    ctx.miterLimit = 8;
+    ctx.miterLimit = 10;
     ctx.lineCap = "butt";
     ctx.strokeStyle = color(RUST, 0.96);
     ctx.lineWidth = Math.max(1.4, L.s * 0.2);
@@ -251,20 +337,18 @@
     }
     ctx.stroke();
 
-    // Square markers at major vertices (hill elbows, tower base and merlon peaks).
-    // Skip the short inner crenellation gutters so the stepped top stays a thin stroke.
+    // Sparse markers: hill elbows and the flag tip, not the dense merlons.
     var acc = 0;
-    var mark = Math.max(1.35, L.s * 0.2);
+    var mark = Math.max(1.25, L.s * 0.18);
     ctx.fillStyle = color(RUST, 0.96);
     for (i = 0; i < pts.length; i++) {
       if (i > 0) acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
       if (acc / total > untilT + 0.002) break;
-      if (i > 0 && i < pts.length - 1) {
-        var prevL = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-        var nextL = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
-        if (prevL < 1.6 && nextL < 1.6) continue;
-      }
-      var m = toCanvas(pts[i][0], pts[i][1], L);
+      var lx = pts[i][0], ly = pts[i][1];
+      var isFlagTip = Math.abs(lx - 45.20) < 0.01 && Math.abs(ly - 0.18) < 0.01;
+      var onHill = lx <= 35.0 || lx >= 48.2;
+      if (!isFlagTip && !onHill) continue;
+      var m = toCanvas(lx, ly, L);
       ctx.fillRect(m.x - mark, m.y - mark, mark * 2, mark * 2);
     }
     ctx.restore();
@@ -593,9 +677,11 @@
       if (ms == null) { frozen = null; start = performance.now(); last = 0; return; }
       seek(ms);
     },
+    setTheme: function (name) { setTheme(name === "light" ? "light" : "dark", false); },
     times: { chaos: T_CHAOS, gather: T_GATHER, hold: T_HOLD, release: T_RELEASE, cycle: T_CYCLE }
   };
 
+  initTheme();
   resize();
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {
