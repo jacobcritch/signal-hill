@@ -1,6 +1,8 @@
-# Signal Hill — site preview
+# Signal Hill
 
-Private preview of a product-lab site. Not published. Do not deploy or push this folder to GitHub Pages or any host until the brand, inbox and copy are signed off.
+Preview of the Signal Hill product-lab site, published at https://www.jacobcritch.com/signal-hill/
 
 Brand: Signal Hill
 Placeholder inbox: hello@signalhill.co
+
+Static HTML, CSS and JS. The page is served with `noindex` while this remains a preview. GitHub Pages deploys from this repository (`jacobcritch/signal-hill`, branch `main`).

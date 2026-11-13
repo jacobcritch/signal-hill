@@ -53,17 +53,18 @@
         <span class="brand__unit">Lab</span>
       </a>
       <nav class="nav" aria-label="Primary">
-        <a href="#copy">Approach</a>
-        <a href="mailto:hello@signalhill.co">Brief</a>
+        <a href="#problem">Problem</a>
+        <a href="#lab">The lab</a>
+        <a href="#contact">Contact</a>
       </nav>
       <p class="masthead__meta">Preview</p>
     </div>
   </header>
 
-  <canvas id="field" class="field" aria-hidden="true"></canvas>
-
-  <main id="copy" class="hero">
-    <div class="shell hero__grid">
+  <main>
+    <section class="hero" id="copy" aria-labelledby="hero-title">
+      <canvas id="field" class="field" aria-hidden="true"></canvas>
+      <div class="shell hero__grid">
       <div class="hero__copy">
         <p class="kicker">A product lab</p>
         <h1 id="hero-title"><span class="line">The signal is</span> <span class="line">in the chaos.</span></h1>
@@ -80,7 +81,116 @@
         <div class="hero__stage" aria-hidden="true"></div>
       </aside>
     </div>
+    </section>
+
+    <section class="section" id="problem" aria-labelledby="problem-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 02 — Failure modes</p>
+        <p class="section-head__id">01 / Problem</p>
+      </header>
+      <h2 id="problem-title">Most teams aren’t short on ideas. They’re short on contact with reality.</h2>
+      <p class="section-lede">Founders are paid to believe. That’s useful until it becomes a distortion field: a roadmap written in a conference room, defended with vanity metrics, while the funnel quietly dies. The lab exists to cut through that.</p>
+      <ol class="modes" role="list">
+        <li>
+          <p class="modes__id">FM-01</p>
+          <h3>The distortion field</h3>
+          <p>A team can talk anyone into a roadmap, including itself. That’s part of building a company. It is also how a year disappears.</p>
+        </li>
+        <li>
+          <p class="modes__id">FM-02</p>
+          <h3>Tunnel vision</h3>
+          <p>You’re too close to the product to see the drop-off. Users stall. Funnels leak. The next feature ships anyway.</p>
+        </li>
+        <li>
+          <p class="modes__id">FM-03</p>
+          <h3>Vanity in the dashboard</h3>
+          <p>Signups, impressions, a graph for the board. None of it answers the only question that matters: what should we build next?</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" id="lab" aria-labelledby="lab-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 03 — Catalog</p>
+        <p class="section-head__id">02 / The lab</p>
+      </header>
+      <h2 id="lab-title">What the lab actually does once it’s in the room.</h2>
+      <p class="section-lede">Not a menu of deliverables you have to assemble yourself. We come in, run the work, and leave you with a decision and the thing that came out of it.</p>
+      <table class="catalog">
+        <caption class="sr-only">Signal Hill services</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Service</th>
+            <th scope="col">What you get</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <th scope="row">Prototypes</th>
+            <td>Working slices of the product, fast enough to test a bet before you staff it.</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <th scope="row">Meta ads demand tests</th>
+            <td>Real spend against a real offer. Find out if anyone wants it before you build the rest.</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <th scope="row">A/B experiments</th>
+            <td>Rigorous tests, not button-color theatre. Designed to settle an argument.</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <th scope="row">Analytics &amp; instrumentation</th>
+            <td>Events, funnels and dashboards tight enough to drive the next build decision.</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <th scope="row">Activation &amp; retention</th>
+            <td>Where new users stall, why they leave, and what would actually make them stay.</td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <th scope="row">Product strategy</th>
+            <td>A clear call on what to build, what to cut, and what is being avoided because it’s uncomfortable.</td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <th scope="row">AI features</th>
+            <td>Zero-to-one product engineering, agent orchestration, and production AI that has a job to do.</td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <th scope="row">Go-to-market</th>
+            <td>Positioning, pages and experiments that connect the product to demand, not just a launch date.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 04 — Intake</p>
+        <p class="section-head__id">03 / Brief</p>
+      </header>
+      <h2 id="contact-title">If you’re ready to hear what the data says — even if you won’t like it — send a brief.</h2>
+      <!-- PLACEHOLDER: hello@signalhill.co is a brand-name inbox, not yet a live mailbox. Replace before launch. -->
+      <a class="mail" href="mailto:hello@signalhill.co">hello@signalhill.co</a>
+      <p class="section-lede">Tell us what you’re building and where it stalls. We’ll tell you whether a short engagement can settle it.</p>
+    </section>
   </main>
+
+  <footer class="colophon">
+    <div class="shell">
+      <div class="colophon__row">
+        <p>Signal Hill</p>
+        <p>The signal is in the chaos.</p>
+        <p>© <span class="js-year">2026</span></p>
+      </div>
+    </div>
+  </footer>
 
   <script src="assets/js/main.js" defer></script>
 </body>

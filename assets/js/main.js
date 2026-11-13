@@ -1,28 +1,30 @@
 (function () {
   "use strict";
 
+  var yearEl = document.querySelector(".js-year");
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
   var canvas = document.getElementById("field");
   if (!canvas) return;
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var ctx = canvas.getContext("2d", { alpha: true });
 
-  // Signal Hill path in logo space (viewBox 0 0 64 36), y down.
+  // Signal Hill as a plotted series in logo space (y down).
+  // The hill is a polyline; at the peak it steps up into a squared, crenellated tower, then back down.
   var PATH = [
     [9, 28], [14, 26.6], [19, 24.8], [23, 23.2], [26, 21.4],
-    [29, 16.6], [33, 11.4], [37, 7.8], [41, 6.2], [46, 8.4],
-    [52, 11], [58, 13.2]
+    [29, 16.6], [33, 11.4], [37, 7.8],
+    [38.7, 6.2],
+    // left wall up, merlon 1
+    [38.7, 0.95], [40.1, 0.95], [40.1, 2.2],
+    // merlon 2, slightly taller
+    [40.55, 2.2], [40.55, 0.7], [42.0, 0.7], [42.0, 2.2],
+    // merlon 3, right wall down
+    [42.45, 2.2], [42.45, 0.95], [43.9, 0.95], [43.9, 6.2],
+    // seaward descent
+    [46.2, 8.4], [52, 11], [58, 13.2]
   ];
-  var TOWER = {
-    body: [38.7, 2.15, 4.6, 4.15],
-    merlons: [
-      [38.7, 1.15, 1.2, 1.15],
-      [40.4, 1.15, 1.2, 1.15],
-      [42.1, 1.15, 1.2, 1.15]
-    ],
-    pole: [40.8, 0.1, 0.5, 1.15],
-    peak: [41, 6.2]
-  };
 
   var PAPER = [239, 236, 230];
   var PAPER2 = [247, 245, 240];
@@ -103,7 +105,8 @@
     var r = stage ? stage.getBoundingClientRect() : null;
     var plot, left, right, top, bottom;
     if (r && r.width > 40 && r.height > 40) {
-      plot = { x: r.left, y: r.top, w: r.width, h: r.height };
+      var origin = canvas.getBoundingClientRect();
+      plot = { x: r.left - origin.left, y: r.top - origin.top, w: r.width, h: r.height };
     } else if (w < 860) {
       plot = { x: w * 0.08, y: h * 0.5, w: w * 0.84, h: h * 0.42 };
     } else {
@@ -183,30 +186,18 @@
     return { x: L.ox + lx * L.s, y: L.oy + ly * L.s };
   }
 
-  function fillRectTargets(L, rect, n, out) {
-    var x0 = rect[0], y0 = rect[1], rw = rect[2], rh = rect[3];
-    for (var i = 0; i < n; i++) {
-      var p = toCanvas(x0 + rand() * rw, y0 + rand() * rh, L);
-      out.push({ x: p.x, y: p.y, t: 0.92 + rand() * 0.08, kind: 1 });
-    }
-  }
-
   function buildTargets(n) {
     var L = layout();
     var targets = [];
-    var towerN = Math.max(120, Math.floor(n * 0.12));
-    var wanderN = Math.max(80, Math.floor(n * 0.14));
-    var pathN = n - towerN - wanderN;
+    var wanderN = Math.max(80, Math.floor(n * 0.16));
+    var pathN = n - wanderN;
 
     for (var i = 0; i < pathN; i++) {
-      var t = i / (pathN - 1);
-      // denser near the peak
-      t = Math.pow(t, 0.92);
-      var jitterT = clamp(t + (rand() - 0.5) * 0.012, 0, 1);
+      var t = pathN <= 1 ? 0 : i / (pathN - 1);
+      var jitterT = clamp(t + (rand() - 0.5) * 0.004, 0, 1);
       var s = samplePath(PATH, jitterT);
-      // Signed gaussian offset so the ridge is dense on the centerline, not hollow.
-      var spread = (rand() + rand() + rand() - 1.5) * L.s * 0.9;
-      if (rand() < 0.1) spread *= 2.1;
+      // Tight to the polyline — a thin plotted series, not a scatter ridge.
+      var spread = (rand() + rand() + rand() - 1.5) * L.s * 0.11;
       var p = toCanvas(s.x, s.y, L);
       targets.push({
         x: p.x + s.nx * spread,
@@ -215,23 +206,68 @@
         kind: 0
       });
     }
-
-    fillRectTargets(L, TOWER.body, Math.floor(towerN * 0.7), targets);
-    TOWER.merlons.forEach(function (m) {
-      fillRectTargets(L, m, Math.max(6, Math.floor(towerN * 0.08)), targets);
-    });
-    fillRectTargets(L, TOWER.pole, Math.max(4, Math.floor(towerN * 0.06)), targets);
-    // leftover tower allotment already mostly used; fine if slightly under n
-
-    while (targets.length < n - wanderN) {
-      var extra = samplePath(PATH, rand());
-      var q = toCanvas(extra.x, extra.y, L);
-      targets.push({ x: q.x, y: q.y, t: extra.t, kind: 0 });
-    }
     for (var j = 0; j < wanderN; j++) {
       targets.push({ x: rand() * w, y: rand() * h, t: rand(), kind: 2 });
     }
     return targets;
+  }
+
+  function seriesUntil(ph) {
+    if (ph.name === "chaos") return 0;
+    if (ph.name === "gather") return easeInOut(ph.local);
+    if (ph.name === "hold") return 1;
+    return 1 - ph.release;
+  }
+
+  function drawSeries(L, untilT) {
+    if (!L || untilT <= 0.02) return;
+    var pts = PATH;
+    var total = pathLength(pts);
+    var maxd = untilT * total;
+    var startP = toCanvas(pts[0][0], pts[0][1], L);
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineJoin = "miter";
+    ctx.miterLimit = 8;
+    ctx.lineCap = "butt";
+    ctx.strokeStyle = color(RUST, 0.96);
+    ctx.lineWidth = Math.max(1.4, L.s * 0.2);
+    ctx.moveTo(startP.x, startP.y);
+    var drawn = 0;
+    var i;
+    for (i = 1; i < pts.length; i++) {
+      var a = pts[i - 1], b = pts[i];
+      var seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      if (drawn + seg <= maxd) {
+        var p = toCanvas(b[0], b[1], L);
+        ctx.lineTo(p.x, p.y);
+        drawn += seg;
+      } else {
+        var u = (maxd - drawn) / (seg || 1);
+        var q = toCanvas(lerp(a[0], b[0], u), lerp(a[1], b[1], u), L);
+        ctx.lineTo(q.x, q.y);
+        break;
+      }
+    }
+    ctx.stroke();
+
+    // Square markers at major vertices (hill elbows, tower base and merlon peaks).
+    // Skip the short inner crenellation gutters so the stepped top stays a thin stroke.
+    var acc = 0;
+    var mark = Math.max(1.35, L.s * 0.2);
+    ctx.fillStyle = color(RUST, 0.96);
+    for (i = 0; i < pts.length; i++) {
+      if (i > 0) acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      if (acc / total > untilT + 0.002) break;
+      if (i > 0 && i < pts.length - 1) {
+        var prevL = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+        var nextL = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]);
+        if (prevL < 1.6 && nextL < 1.6) continue;
+      }
+      var m = toCanvas(pts[i][0], pts[i][1], L);
+      ctx.fillRect(m.x - mark, m.y - mark, mark * 2, mark * 2);
+    }
+    ctx.restore();
   }
 
   function alloc() {
@@ -264,7 +300,7 @@
       kind[i] = t.kind;
       delay[i] = t.kind === 1 ? 0.72 + t.t * 0.25 : t.kind === 2 ? 1 : t.t;
       seed[i] = rand() * 100;
-      size[i] = (t.kind === 1 ? 1.4 : 1.15) + rand() * (t.kind === 1 ? 0.7 : 1.25);
+      size[i] = t.kind === 2 ? (1.05 + rand() * 1.1) : (0.85 + rand() * 0.55);
       if (t.kind === 2 || rand() < 0.28) {
         bornX[i] = rand() * w;
         bornY[i] = rand() * h;
@@ -281,8 +317,9 @@
 
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = window.innerWidth;
-    h = window.innerHeight;
+    var host = canvas.parentElement || document.querySelector(".hero") || document.documentElement;
+    w = Math.max(1, host.clientWidth || window.innerWidth);
+    h = Math.max(1, host.clientHeight || window.innerHeight);
     canvas.width = Math.floor(w * dpr);
     canvas.height = Math.floor(h * dpr);
     canvas.style.width = w + "px";
@@ -401,10 +438,8 @@
     var s = size[i] * (0.95 + f * 0.2);
     if (s < 1.15) s = 1.15;
     var c, a;
-    if (kind[i] === 1) {
-      c = RUST; a = 0.35 + f * 0.58;
-    } else if (kind[i] === 2) {
-      c = INK; a = 0.22;
+    if (kind[i] === 2) {
+      c = INK; a = 0.2;
     } else if (f > 0.65) {
       c = RUST; a = 0.42 + (f - 0.65) * 1.15;
     } else if (f > 0.25) {
@@ -441,6 +476,7 @@
     for (i = 0; i < count; i++) {
       if (kind[i] !== 2) paintDot(i, ph);
     }
+    drawSeries(L, seriesUntil(ph));
     if (L.plot) ctx.restore();
   }
 
@@ -508,8 +544,9 @@
   function onPointer(e) {
     var p = e.touches ? e.touches[0] : e;
     if (!p) return;
-    mouse.x = p.clientX;
-    mouse.y = p.clientY;
+    var cr = canvas.getBoundingClientRect();
+    mouse.x = p.clientX - cr.left;
+    mouse.y = p.clientY - cr.top;
     mouse.on = true;
   }
 
