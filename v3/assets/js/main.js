@@ -580,10 +580,14 @@
   function onResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
+      // Ignore height-only jitter (mobile URL bar showing/hiding while scrolling)
+      var hostEl = canvas.parentElement || document.documentElement;
+      var nw = hostEl.clientWidth, nh = hostEl.clientHeight;
+      if (Math.abs(nw - w) < 2 && Math.abs(nh - h) < 160) return;
       var keep = frozen;
       resize();
       if (keep != null) seek(keep);
-      else if (!reduce) { start = performance.now(); last = 0; }
+      else if (!reduce) { last = 0; }
     }, 80);
   }
   var resizeTimer;
