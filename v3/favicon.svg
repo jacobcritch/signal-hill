@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Signal Hill">
+  <style>
+    .bg { fill: #121110; }
+    .grid, .axis { stroke: #ece8e0; fill: none; }
+    .hill { stroke: #e8552e; fill: none; }
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #efece6; }
+      .grid, .axis { stroke: #161513; }
+      .hill { stroke: #d64520; }
+    }
+  </style>
+  <rect class="bg" width="32" height="32"/>
+  <g class="grid" stroke-width="0.4" opacity="0.22">
+    <line x1="5" y1="11" x2="29" y2="11"/>
+    <line x1="5" y1="18" x2="29" y2="18"/>
+    <line x1="13" y1="5" x2="13" y2="26"/>
+    <line x1="21" y1="5" x2="21" y2="26"/>
+  </g>
+  <g class="axis" stroke-width="0.75" stroke-linecap="square" opacity="0.45">
+    <path d="M5 5 V26 H29"/>
+    <path d="M5 11 H3.5 M5 18 H3.5"/>
+    <path d="M13 26 V27.6 M21 26 V27.6 M29 26 V27.6"/>
+  </g>
+  <path class="hill" d="M5.45 24.08 L7.72 23.12 L9.98 21.88 L11.79 20.78 L13.15 19.62 L14.51 16.67 L16.05 13.78 L17.23 12.1 L17.59 11.62 L17.59 7.92 L18.4 7.92 L18.4 8.43 L18.72 8.43 L18.72 7.92 L19.58 7.92 L19.58 8.43 L20.58 8.43 L20.58 5.86 L20.98 5.86 L20.98 6.24 L21.14 6.24 L21.14 5.86 L21.26 5.86 L21.26 5.03 L21.82 5.03 L21.82 5.38 L21.26 5.38 L21.26 5.86 L21.44 5.86 L21.44 6.24 L21.6 6.24 L21.6 5.86 L21.87 5.86 L21.87 10.52 L22.3 10.52 L22.3 11.62 L23.2 12.0 L25.11 12.82 L27.64 13.92" stroke-width="1.55" stroke-linejoin="miter" stroke-miterlimit="8" stroke-linecap="butt"/>
+</svg>
