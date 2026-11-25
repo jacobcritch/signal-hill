@@ -1,11 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 36" fill="none" role="img" aria-label="Signal Hill, drawn as a chart line with Cabot Tower at the peak">
   <style>
-    .grid, .axis { stroke: #ece8e0; }
+    .grid, .axis { stroke: #161513; }
     .hill { stroke: #e8552e; }
-    @media (prefers-color-scheme: light) {
-      .grid, .axis { stroke: #161513; }
-      .hill { stroke: #d64520; }
-    }
   </style>
   <g class="grid" stroke-width="0.4" opacity="0.22">
     <line x1="8" y1="9" x2="61" y2="9"/>

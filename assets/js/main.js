@@ -46,13 +46,12 @@
     [48.2, 10.4], [52.4, 11.6], [58, 13.2]
   ];
 
-  var PAPER = [18, 17, 16];
-  var PAPER2 = [24, 23, 21];
-  var INK = [236, 232, 224];
+  var PAPER = [239, 236, 230];
+  var PAPER2 = [247, 245, 240];
+  var INK = [22, 21, 19];
   var RUST = [232, 85, 46];
-  var GRID = "rgba(236, 232, 224, 0.07)";
-  var AXIS = "rgba(236, 232, 224, 0.32)";
-  var THEME_KEY = "signal-hill-theme";
+  var GRID = "rgba(22, 21, 19, 0.08)";
+  var AXIS = "rgba(22, 21, 19, 0.32)";
 
   var T_CHAOS = 1600;
   var T_GATHER = 4800;
@@ -85,69 +84,6 @@
 
   function color(rgb, a) {
     return "rgba(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + "," + a + ")";
-  }
-
-  function currentTheme() {
-    return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
-  }
-
-  function applyPalette() {
-    if (currentTheme() === "light") {
-      PAPER = [239, 236, 230];
-      PAPER2 = [247, 245, 240];
-      INK = [22, 21, 19];
-      RUST = [214, 69, 32];
-      GRID = "rgba(22, 21, 19, 0.08)";
-      AXIS = "rgba(22, 21, 19, 0.32)";
-    } else {
-      PAPER = [18, 17, 16];
-      PAPER2 = [24, 23, 21];
-      INK = [236, 232, 224];
-      RUST = [232, 85, 46];
-      GRID = "rgba(236, 232, 224, 0.07)";
-      AXIS = "rgba(236, 232, 224, 0.32)";
-    }
-  }
-
-  function syncToggle(theme) {
-    var btn = document.querySelector("[data-theme-toggle]");
-    if (!btn) return;
-    var next = theme === "light" ? "dark" : "light";
-    btn.setAttribute("aria-label", "Switch to " + next + " theme");
-    btn.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
-  }
-
-  function setTheme(theme, persist) {
-    document.documentElement.setAttribute("data-theme", theme);
-    if (persist !== false) {
-      try { localStorage.setItem(THEME_KEY, theme); } catch (err) {}
-    }
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "light" ? "#efece6" : "#121110");
-    applyPalette();
-    syncToggle(theme);
-    if (w) draw(frozen != null ? frozen : 1);
-  }
-
-  function initTheme() {
-    applyPalette();
-    syncToggle(currentTheme());
-    var btn = document.querySelector("[data-theme-toggle]");
-    if (btn) {
-      btn.addEventListener("click", function () {
-        setTheme(currentTheme() === "dark" ? "light" : "dark", true);
-      });
-    }
-    var mq = window.matchMedia("(prefers-color-scheme: light)");
-    var onChange = function (e) {
-      var saved = null;
-      try { saved = localStorage.getItem(THEME_KEY); } catch (err) {}
-      if (saved !== "light" && saved !== "dark") {
-        setTheme(e.matches ? "light" : "dark", false);
-      }
-    };
-    if (mq.addEventListener) mq.addEventListener("change", onChange);
-    else if (mq.addListener) mq.addListener(onChange);
   }
 
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -356,9 +292,9 @@
 
   function alloc() {
     var area = w * h;
-    var isMobile = w < 700 || "ontouchstart" in window && w < 900;
-    var target = isMobile ? 2800 : area > 1.4e6 ? 7200 : 5600;
-    if (reduce) target = Math.min(target, 2800);
+    var isMobile = w < 700 || ("ontouchstart" in window && w < 900);
+    var target = isMobile ? 2200 : area > 4e5 ? 5600 : 4200;
+    if (reduce) target = Math.min(target, 1800);
     count = target;
     x = new Float32Array(count);
     y = new Float32Array(count);
@@ -523,7 +459,7 @@
     if (s < 1.15) s = 1.15;
     var c, a;
     if (kind[i] === 2) {
-      c = INK; a = 0.2;
+      c = INK; a = 0.22;
     } else if (f > 0.65) {
       c = RUST; a = 0.42 + (f - 0.65) * 1.15;
     } else if (f > 0.25) {
@@ -541,25 +477,16 @@
     var L = layout();
 
     ctx.clearRect(0, 0, w, h);
-
-    // Ambient noise across the page (the card fill will cover any that land in the plot).
-    var i;
-    for (i = 0; i < count; i++) {
-      if (kind[i] === 2) paintDot(i, ph);
-    }
-
     drawPlot(L);
 
-    // Hill particles stay inside the figure panel.
+    var i;
     if (L.plot) {
       ctx.save();
       ctx.beginPath();
       ctx.rect(L.plot.x, L.plot.y, L.plot.w, L.plot.h);
       ctx.clip();
     }
-    for (i = 0; i < count; i++) {
-      if (kind[i] !== 2) paintDot(i, ph);
-    }
+    for (i = 0; i < count; i++) paintDot(i, ph);
     drawSeries(L, seriesUntil(ph));
     if (L.plot) ctx.restore();
   }
@@ -650,16 +577,25 @@
   });
   io.observe(canvas);
 
-  var resizeTimer;
-  window.addEventListener("resize", function () {
+  function onResize() {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
+      // Ignore height-only jitter (mobile URL bar showing/hiding while scrolling)
+      var hostEl = canvas.parentElement || document.documentElement;
+      var nw = hostEl.clientWidth, nh = hostEl.clientHeight;
+      if (Math.abs(nw - w) < 2 && Math.abs(nh - h) < 160) return;
       var keep = frozen;
       resize();
       if (keep != null) seek(keep);
-      else if (!reduce) { start = performance.now(); last = 0; }
+      else if (!reduce) { last = 0; }
     }, 80);
-  });
+  }
+  var resizeTimer;
+  window.addEventListener("resize", onResize);
+  if (window.ResizeObserver) {
+    var host = canvas.parentElement;
+    if (host) new ResizeObserver(onResize).observe(host);
+  }
 
   // Screenshot / debug hook: ?freeze=mid|resolved|chaos
   function parseFreeze(val) {
@@ -677,11 +613,9 @@
       if (ms == null) { frozen = null; start = performance.now(); last = 0; return; }
       seek(ms);
     },
-    setTheme: function (name) { setTheme(name === "light" ? "light" : "dark", false); },
     times: { chaos: T_CHAOS, gather: T_GATHER, hold: T_HOLD, release: T_RELEASE, cycle: T_CYCLE }
   };
 
-  initTheme();
   resize();
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(function () {

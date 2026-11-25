@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Signal Hill | The signal is in the chaos</title>
+  <meta name="description" content="Signal Hill is a product lab. Human behavior is chaos. We find the signal, and build what it points to.">
+  <meta name="theme-color" content="#121110">
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Signal Hill">
+  <meta property="og:title" content="Signal Hill | The signal is in the chaos">
+  <meta property="og:description" content="Human behavior is chaos. We find the signal, and build what it points to.">
+  <meta property="og:image" content="assets/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Signal Hill — The signal is in the chaos.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Signal Hill | The signal is in the chaos">
+  <meta name="twitter:description" content="Human behavior is chaos. We find the signal, and build what it points to.">
+  <meta name="twitter:image" content="assets/img/og-image.png">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <script>
+    (function () {
+      var t = null;
+      try {
+        var q = new URLSearchParams(location.search).get("theme");
+        if (q === "light" || q === "dark") t = q;
+        if (!t) t = localStorage.getItem("signal-hill-theme");
+      } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = (window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", t === "light" ? "#efece6" : "#121110");
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>document.documentElement.classList.replace('no-js','js');</script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Signal Hill",
+    "description": "A product lab. Human behavior is chaos. We find the signal, and build what it points to.",
+    "email": "hello@signalhill.co"
+  }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#copy">Skip to content</a>
+
+  <header class="masthead" id="top">
+    <div class="shell">
+      <a class="brand" href="#top" aria-label="Signal Hill">
+        <svg class="brand__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 36" fill="none" width="64" height="36" aria-hidden="true">
+          <g class="brand__grid" stroke="currentColor" stroke-width="0.4" opacity="0.28">
+            <line x1="8" y1="9" x2="61" y2="9"/>
+            <line x1="8" y1="16" x2="61" y2="16"/>
+            <line x1="8" y1="23" x2="61" y2="23"/>
+            <line x1="21" y1="6" x2="21" y2="29"/>
+            <line x1="34" y1="6" x2="34" y2="29"/>
+            <line x1="47" y1="6" x2="47" y2="29"/>
+          </g>
+          <g stroke="currentColor" stroke-width="0.7" stroke-linecap="square" opacity="0.5">
+            <path d="M8 6 V29 H61"/>
+            <path d="M8 9 H6.2 M8 16 H6.2 M8 23 H6.2"/>
+            <path d="M21 29 V30.8 M34 29 V30.8 M47 29 V30.8 M60 29 V30.8"/>
+          </g>
+          <path class="brand__hill" d="M9 28 L14 26.6 L19 24.8 L23 23.2 L26 21.5 L29 17.2 L32.4 13 L35 10.55 L35.8 9.85 L35.8 4.45 L37.6 4.45 L37.6 5.2 L38.3 5.2 L38.3 4.45 L40.2 4.45 L40.2 5.2 L42.4 5.2 L42.4 1.45 L43.3 1.45 L43.3 2 L43.65 2 L43.65 1.45 L43.9 1.45 L43.9 0.25 L45.15 0.25 L45.15 0.75 L43.9 0.75 L43.9 1.45 L44.3 1.45 L44.3 2 L44.65 2 L44.65 1.45 L45.25 1.45 L45.25 8.25 L46.2 8.25 L46.2 9.85 L48.2 10.4 L52.4 11.6 L58 13.2" stroke="currentColor" stroke-width="1.85" stroke-linejoin="miter" stroke-miterlimit="8" stroke-linecap="butt"/>
+        </svg>
+        <span class="brand__name">Signal Hill</span>
+        <span class="brand__unit">Lab</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#problem">Problem</a>
+        <a href="#lab">The lab</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="masthead__tools">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light theme" aria-pressed="true">
+          <svg class="theme-toggle__icon theme-toggle__sun" viewBox="0 0 16 16" aria-hidden="true">
+            <circle cx="8" cy="8" r="2.7" fill="none" stroke="currentColor" stroke-width="1.25"/>
+            <path d="M8 1.6v1.7M8 12.7v1.7M1.6 8h1.7M12.7 8h1.7M3.3 3.3l1.2 1.2M11.5 11.5l1.2 1.2M3.3 12.7l1.2-1.2M11.5 4.5l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="square"/>
+          </svg>
+          <svg class="theme-toggle__icon theme-toggle__moon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M6.1 2.3a5.7 5.7 0 1 0 7.2 7.4A4.7 4.7 0 1 1 6.1 2.3z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <p class="masthead__meta">Preview</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="copy" aria-labelledby="hero-title">
+      <canvas id="field" class="field" aria-hidden="true"></canvas>
+      <div class="shell hero__grid">
+      <div class="hero__copy">
+        <p class="kicker">A product lab</p>
+        <h1 id="hero-title"><span class="line">The signal is</span> <span class="line">in the chaos.</span></h1>
+        <p class="lede">Human behavior is chaos. We find the signal, and build what it points to.</p>
+        <!-- PLACEHOLDER: hello@signalhill.co is a brand-name inbox, not yet a live mailbox. Replace before launch. -->
+        <a class="btn" href="mailto:hello@signalhill.co">Open a brief</a>
+      </div>
+
+      <aside class="ex" aria-label="Illustrative figure of noisy behavior resolving into the Signal Hill silhouette">
+        <header class="ex__head">
+          <p class="fig-label">Fig. 01 — Signal in the chaos</p>
+          <p class="ex__badge">Illustrative</p>
+        </header>
+        <div class="hero__stage" aria-hidden="true"></div>
+      </aside>
+    </div>
+    </section>
+
+    <section class="section" id="problem" aria-labelledby="problem-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 02 — Failure modes</p>
+        <p class="section-head__id">01 / Problem</p>
+      </header>
+      <h2 id="problem-title">Most teams aren’t short on ideas. They’re short on contact with reality.</h2>
+      <p class="section-lede">Founders are paid to believe. That’s useful until it becomes a distortion field: a roadmap written in a conference room, defended with vanity metrics, while the funnel quietly dies. The lab exists to cut through that.</p>
+      <ol class="modes" role="list">
+        <li>
+          <p class="modes__id">FM-01</p>
+          <h3>The distortion field</h3>
+          <p>A team can talk anyone into a roadmap, including itself. That’s part of building a company. It is also how a year disappears.</p>
+        </li>
+        <li>
+          <p class="modes__id">FM-02</p>
+          <h3>Tunnel vision</h3>
+          <p>You’re too close to the product to see the drop-off. Users stall. Funnels leak. The next feature ships anyway.</p>
+        </li>
+        <li>
+          <p class="modes__id">FM-03</p>
+          <h3>Vanity in the dashboard</h3>
+          <p>Signups, impressions, a graph for the board. None of it answers the only question that matters: what should we build next?</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="section" id="lab" aria-labelledby="lab-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 03 — Catalog</p>
+        <p class="section-head__id">02 / The lab</p>
+      </header>
+      <h2 id="lab-title">What the lab actually does once it’s in the room.</h2>
+      <p class="section-lede">Not a menu of deliverables you have to assemble yourself. We come in, run the work, and leave you with a decision and the thing that came out of it.</p>
+      <table class="catalog">
+        <caption class="sr-only">Signal Hill services</caption>
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Service</th>
+            <th scope="col">What you get</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <th scope="row">Prototypes</th>
+            <td>Working slices of the product, fast enough to test a bet before you staff it.</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <th scope="row">Meta ads demand tests</th>
+            <td>Real spend against a real offer. Find out if anyone wants it before you build the rest.</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <th scope="row">A/B experiments</th>
+            <td>Rigorous tests, not button-color theatre. Designed to settle an argument.</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <th scope="row">Analytics &amp; instrumentation</th>
+            <td>Events, funnels and dashboards tight enough to drive the next build decision.</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <th scope="row">Activation &amp; retention</th>
+            <td>Where new users stall, why they leave, and what would actually make them stay.</td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <th scope="row">Product strategy</th>
+            <td>A clear call on what to build, what to cut, and what is being avoided because it’s uncomfortable.</td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <th scope="row">AI features</th>
+            <td>Zero-to-one product engineering, agent orchestration, and production AI that has a job to do.</td>
+          </tr>
+          <tr>
+            <td>08</td>
+            <th scope="row">Go-to-market</th>
+            <td>Positioning, pages and experiments that connect the product to demand, not just a launch date.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <header class="section-head">
+        <p class="fig-label">Fig. 04 — Intake</p>
+        <p class="section-head__id">03 / Brief</p>
+      </header>
+      <h2 id="contact-title">If you’re ready to hear what the data says — even if you won’t like it — send a brief.</h2>
+      <!-- PLACEHOLDER: hello@signalhill.co is a brand-name inbox, not yet a live mailbox. Replace before launch. -->
+      <a class="mail" href="mailto:hello@signalhill.co">hello@signalhill.co</a>
+      <p class="section-lede">Tell us what you’re building and where it stalls. We’ll tell you whether a short engagement can settle it.</p>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <div class="shell">
+      <div class="colophon__row">
+        <p>Signal Hill</p>
+        <p>The signal is in the chaos.</p>
+        <p>© <span class="js-year">2026</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
