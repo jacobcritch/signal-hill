@@ -69,45 +69,36 @@ body {
   color: var(--paper-2);
 }
 .masthead .brand__mark { color: var(--paper-2); }
-.masthead .brand__unit {
-  color: rgba(247, 245, 240, 0.7);
-  border-color: rgba(247, 245, 240, 0.28);
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  color: inherit;
-  text-decoration: none;
-  min-width: 0;
-}
-
-.brand__mark {
-  display: block;
-  width: 2.35rem;
-  height: 1.32rem;
-  color: var(--ink);
+.masthead__mail {
   flex-shrink: 0;
-}
-.brand__hill { stroke: var(--rust); }
-
-.brand__name {
   font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  text-transform: lowercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  color: rgba(247, 245, 240, 0.82);
+  text-decoration: none;
+  padding-block: 0.35rem;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
 }
-
+.masthead__mail:hover,
+.masthead__mail:focus-visible {
+  color: #fff;
+  border-bottom-color: var(--rust);
+  outline: none;
+}
+.masthead /* "a product lab" as a footnote-style superscript after the wordmark */
 .brand__unit {
+  position: relative;
+  top: -0.85em;
+  vertical-align: baseline;
+  margin-left: 0.3em;
   font-family: var(--font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 0;
+  text-transform: lowercase;
   color: var(--muted);
-  border: var(--rule);
-  padding: 0.12rem 0.4rem;
   white-space: nowrap;
 }
 
@@ -199,39 +190,6 @@ h1 {
   outline: none;
 }
 
-.btn--header {
-  min-height: 2.15rem;
-  padding: 0.3rem 0.85rem;
-  background: var(--paper-2);
-  color: var(--ink);
-  font-size: 0.88rem;
-  border-color: var(--paper-2);
-  flex-shrink: 0;
-}
-.btn--header:hover,
-.btn--header:focus-visible {
-  background: var(--rust);
-  border-color: var(--rust);
-  color: #fff;
-}
-
-.btn--stack {
-  flex-direction: column;
-  gap: 0.15rem;
-  min-height: 3.1rem;
-  padding: 0.5rem 1.3rem 0.55rem;
-  line-height: 1.15;
-  text-align: center;
-}
-.btn__sub {
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  opacity: 0.62;
-}
-.btn--stack:hover .btn__sub,
-.btn--stack:focus-visible .btn__sub { opacity: 0.85; }
 .cta__mail {
   color: var(--muted);
   text-decoration: none;
@@ -354,7 +312,8 @@ h1 {
 }
 
 @media (max-width: 560px) {
-  .brand__unit { display: none; }
+  .brand__unit { font-size: 0.52rem; margin-left: 0.25em; }
+  .masthead__mail { font-size: 0.7rem; }
   h1 { font-size: 1.85rem; max-width: none; }
   .lede { font-size: 1rem; margin-bottom: 1.2rem; }
   .hero { grid-template-rows: auto minmax(15.5rem, 1fr); padding: 1.25rem var(--gutter) 1rem; }
