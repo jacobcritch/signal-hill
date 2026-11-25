@@ -86,7 +86,37 @@ body {
   border-bottom-color: var(--rust);
   outline: none;
 }
-.masthead /* "a product lab" as a footnote-style superscript after the wordmark */
+.masthead .brand__unit { color: rgba(247, 245, 240, 0.6); }
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.brand__mark {
+  display: block;
+  width: 2.35rem;
+  height: 1.32rem;
+  color: var(--ink);
+  flex-shrink: 0;
+}
+.brand__hill { stroke: var(--rust); }
+
+.brand__name {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
+/* "a product lab" as a footnote-style superscript after the wordmark */
 .brand__unit {
   position: relative;
   top: -0.85em;
@@ -312,8 +342,11 @@ h1 {
 }
 
 @media (max-width: 560px) {
-  .brand__unit { font-size: 0.52rem; margin-left: 0.25em; }
-  .masthead__mail { font-size: 0.7rem; }
+  .brand { gap: 0.45rem; }
+  .brand__mark { width: 2rem; height: 1.12rem; }
+  .brand__name { font-size: 0.92rem; }
+  .brand__unit { font-size: 0.5rem; margin-left: 0.25em; letter-spacing: 0.02em; }
+  .masthead__mail { font-size: 0.66rem; }
   h1 { font-size: 1.85rem; max-width: none; }
   .lede { font-size: 1rem; margin-bottom: 1.2rem; }
   .hero { grid-template-rows: auto minmax(15.5rem, 1fr); padding: 1.25rem var(--gutter) 1rem; }
