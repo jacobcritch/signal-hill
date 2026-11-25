@@ -128,7 +128,9 @@
     var plot, left, right, top, bottom;
     if (r && r.width > 40 && r.height > 40) {
       var origin = canvas.getBoundingClientRect();
-      plot = { x: r.left - origin.left, y: r.top - origin.top, w: r.width, h: r.height };
+      // Leave room for the figure caption at the top of the stage.
+      var cap = 26;
+      plot = { x: r.left - origin.left, y: r.top - origin.top + cap, w: r.width, h: r.height - cap };
     } else if (w < 860) {
       plot = { x: w * 0.08, y: h * 0.5, w: w * 0.84, h: h * 0.42 };
     } else {
@@ -150,39 +152,40 @@
     var pw = 56 * s, ph = 32 * s;
     var ox = left + (boxW - pw) / 2 - 6 * s;
     var oy = top + (boxH - ph) / 2 - 1 * s;
-    return { s: s, ox: ox, oy: oy, left: left, right: right, top: top, bottom: bottom, plot: plot };
+    // Text block (headline, pills, lede, CTA): particles fade out over it.
+    var copyEl = document.querySelector(".hero__copy");
+    var text = null;
+    if (copyEl) {
+      var cr = copyEl.getBoundingClientRect();
+      var co = canvas.getBoundingClientRect();
+      text = { l: cr.left - co.left, t: cr.top - co.top, r: cr.right - co.left, b: cr.bottom - co.top };
+    }
+    return { s: s, ox: ox, oy: oy, left: left, right: right, top: top, bottom: bottom, plot: plot, text: text };
   }
 
   function drawPlot(L) {
     var p = L.plot;
     if (!p) return;
     ctx.save();
-    ctx.beginPath();
-    ctx.rect(p.x, p.y, p.w, p.h);
-    ctx.clip();
-    ctx.fillStyle = color(PAPER2, 1);
-    ctx.fillRect(p.x, p.y, p.w, p.h);
 
-    // Graph-paper grid, origin at the axis corner
+    // Graph-paper grid across the whole hero, origin at the axis corner
     var step = 28;
+    var gx0 = L.left - Math.ceil(L.left / step) * step;
     ctx.strokeStyle = GRID;
     ctx.lineWidth = 1;
     ctx.beginPath();
-    for (var gx = L.left; gx <= L.right + 0.5; gx += step) {
-      ctx.moveTo(Math.round(gx) + 0.5, p.y);
-      ctx.lineTo(Math.round(gx) + 0.5, p.y + p.h);
+    for (var gx = gx0; gx <= w + 0.5; gx += step) {
+      ctx.moveTo(Math.round(gx) + 0.5, 0);
+      ctx.lineTo(Math.round(gx) + 0.5, h);
     }
-    for (var gy = L.bottom; gy >= p.y - 0.5; gy -= step) {
-      ctx.moveTo(p.x, Math.round(gy) + 0.5);
-      ctx.lineTo(p.x + p.w, Math.round(gy) + 0.5);
-    }
-    for (gy = L.bottom + step; gy <= p.y + p.h; gy += step) {
-      ctx.moveTo(p.x, Math.round(gy) + 0.5);
-      ctx.lineTo(p.x + p.w, Math.round(gy) + 0.5);
+    var gy0 = L.bottom + Math.ceil((h - L.bottom) / step) * step;
+    for (var gy = gy0; gy >= -0.5; gy -= step) {
+      ctx.moveTo(0, Math.round(gy) + 0.5);
+      ctx.lineTo(w, Math.round(gy) + 0.5);
     }
     ctx.stroke();
 
-    // Faint axes + ticks
+    // Faint axes + ticks, only around the plotted area (right of / below the text)
     ctx.strokeStyle = AXIS;
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -202,6 +205,16 @@
     }
     ctx.stroke();
     ctx.restore();
+  }
+
+  // 1 away from the text block, low over it, with a soft edge.
+  function textFade(px, py, L) {
+    var t = L.text;
+    if (!t) return 1;
+    var dx = Math.max(t.l - px, 0, px - t.r);
+    var dy = Math.max(t.t - py, 0, py - t.b);
+    var d = Math.sqrt(dx * dx + dy * dy);
+    return 0.18 + 0.82 * clamp(d / 70, 0, 1);
   }
 
   function toCanvas(lx, ly, L) {
@@ -453,7 +466,7 @@
     return formed;
   }
 
-  function paintDot(i, ph) {
+  function paintDot(i, ph, L) {
     var f = formedOf(i, ph);
     var s = size[i] * (0.95 + f * 0.2);
     if (s < 1.15) s = 1.15;
@@ -467,7 +480,8 @@
     } else {
       c = INK; a = 0.28 + f * 0.15;
     }
-    ctx.fillStyle = color(c, clamp(a, 0.1, 0.94));
+    a = clamp(a, 0.1, 0.94) * textFade(x[i], y[i], L);
+    ctx.fillStyle = color(c, a);
     ctx.fillRect(x[i] - s * 0.5, y[i] - s * 0.5, s, s);
   }
 
@@ -479,16 +493,8 @@
     ctx.clearRect(0, 0, w, h);
     drawPlot(L);
 
-    var i;
-    if (L.plot) {
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(L.plot.x, L.plot.y, L.plot.w, L.plot.h);
-      ctx.clip();
-    }
-    for (i = 0; i < count; i++) paintDot(i, ph);
+    for (var i = 0; i < count; i++) paintDot(i, ph, L);
     drawSeries(L, seriesUntil(ph));
-    if (L.plot) ctx.restore();
   }
 
 
